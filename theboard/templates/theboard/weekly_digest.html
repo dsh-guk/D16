@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Digest</title>
+</head>
+<body>
+    <h3>Hello!</h3>
+    <h3>Weekly news from MMORPG Board.</h3>
+    <hr>
+    <br>    
+    {% if digest %}
+    <h3>New Posts:</h3>
+    <br/>
+        <table>
+        {% for post in digest %}
+            <tr>
+                <td>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }} </a>
+                </td>
+                <td>
+                    {{ post.body|truncatechars:50|safe }}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h2>No new posts this week ...</h2>
+    {% endif %}
+<br>
+<hr>
+<br>
+<br>
+<p><h4>See you on <a href="http://127.0.0.1:8000/">MMORPG Board</a> and have a nice day!!!</h4></p>
+<br>
+<br>
+</body>
+</html>

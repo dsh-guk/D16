@@ -1,0 +1,32 @@
+{% extends 'theboard/main.html' %}
+{% load static %}
+
+{% block title %}Edit Profile Page!{% endblock %}
+
+{% block content%}
+
+{% if user.is_authenticated %}
+    {% if user.id == userprofile.user.id %}
+        <h1>Edit Profile Page ...</h1>
+        </br></br>
+        <div class="form-group">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                </br>
+                <button class="btn btn-secondary">Update Profile Page</button>
+                </br></br></br>
+        </div>
+    {% else %}
+        You're not the correct user to edit this page ...
+
+    {% endif %}
+
+{% else %}
+
+    You're not allowed here! (and you know it ...)
+
+{% endif %}
+
+{% endblock %}

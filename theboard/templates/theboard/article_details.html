@@ -1,0 +1,162 @@
+{% extends 'theboard/main.html' %}
+
+{% load static %}
+
+{% block title %}
+    MMORPG Board - {{ post.title }}
+{% endblock %}
+
+{% block content%}
+
+<h1>{{ post.title }}</h1>
+
+                
+<a class="btn btn-warning btn-sm" href="{% url 'category' post.category|slugify %}" role="button">{{ post.category }}</a>
+</br></br>
+
+<small>
+  <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group btn-group-sm" role="group" aria-label="First group">
+      <p>Posted by  
+      <strong>
+      {% if post.author.first_name %}  
+        {{ post.author.first_name }} {{ post.author.last_name }}
+      {% else %}
+        {{ post.author.username }}
+      {% endif %}
+      </strong>
+       on {{ post.post_date }}
+      </p>                   
+    </div>
+    {% if user.is_authenticated %}
+        {% if user.id == post.author.id %}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end btn-group-sm">                
+                <a class="btn btn-outline-secondary me-md-2 btn-sm" href="{% url 'update_post' post.pk %}" role="button">Edit</a>
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'delete_post' post.pk %}" role="button">Delete</a>
+            </div>
+        {% endif %}
+    {% endif %}
+  </div> 
+</small>
+<hr/>
+</br>
+
+{% if post.header_image %}
+    <img src="{{ post.header_image.url }}">
+{% endif %}
+
+<br/><br/>
+{{ post.body|safe }}
+<br/>
+<hr/>
+<br/>
+
+<!-- Author info block -->
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-2">
+        {% if post.author.userprofile.profile_pic %}  
+            <img src="{{ post.author.userprofile.profile_pic.url }}" class="img-fluid rounded-start" width=182 heght=182>
+        {% else %}
+            <img src="{% static 'theboard/img/default_profile_pic.jpeg' %}" class="img-fluid rounded-start" width=182 heght=182>
+        {% endif %}
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">
+            {% if post.author.first_name %}  
+                {{ post.author.first_name }} {{ post.author.last_name }}
+            {% else %}
+                {{ post.author.username }}
+            {% endif %}            
+          </h5>
+
+          <p class=small text-muted>
+
+            {% if post.author.userprofile.bio %}
+            <a href="{% url 'show_profile_page' post.author.id %}">Profile Page</a>
+            {% endif %}
+
+              {% if post.author.userprofile.website_url %}
+                | <a href="{{ post.author.userprofile.website_url}}">Website</a>
+              {% endif %}
+
+              {% if post.author.userprofile.facebook_url %}
+                | <a href="{{ post.author.userprofile.facebook_url}}">Facebook</a>
+              {% endif %}
+
+              {% if post.author.userprofile.twitter_url %}
+                | <a href="{{ post.author.userprofile.twitter_url}}">Twitter</a>
+              {% endif %}
+
+              {% if post.author.userprofile.instagram_url %}
+                | <a href="{{ post.author.userprofile.instagram_url}}">Instagram</a>
+              {% endif %}
+
+              {% if post.author.userprofile.pinterest_url %}
+                | <a href="{{ post.author.userprofile.pinterest_url}}">Pinterest</a>
+              {% endif %}
+          </p>
+
+          <p class="card-text">{{ post.author.userprofile.bio|safe|truncatechars:250 }}</p>
+          <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</br>
+<!-- End Author info block -->
+
+
+<!-- Comments block -->
+<!-- {{ post_comments }} -->
+
+</br>
+<h2>{{ post_comments_count }} Responses ...</h2>
+</br>
+
+{% if not post.comments.all %}
+
+  No Responses Yet ...
+  {% if user.id != post.author.id %}
+    <a href="{% url 'add_comment' post.pk %}">Add One</a>
+  {% endif %}
+{% else %}
+  {% if user.id != post.author.id %}
+    <a href="{% url 'add_comment' pk=post.pk %}">Add Response</a>
+  {% endif %}
+
+  </br></br>
+
+  
+  {% for comment in post_comments %}
+
+    <strong>{{ comment.author }} - {{ comment.date_added }}</strong>
+    <br/>
+    {{ comment.body }}
+    </br>
+      {% if user.is_authenticated %}
+        {% if user.id == post.author.id %}
+          {% if not comment.approved_comment %}
+              <a class="btn btn-primary btn-sm" href="{% url 'comment_approve' pk=comment.pk %}" role="button">Accepte<span class="glyphicon glyphicon-ok"></span></a>
+              <a class="btn btn-danger btn-sm" href="{% url 'comment_remove' pk=comment.pk %}" role="button">Delete<span class="glyphicon glyphicon-remove"></span></a>
+          {% else %}
+              <a class="btn btn-secondary btn-sm" href="{% url 'comment_disapprove' pk=comment.pk %}" role="button">Unaccepte<span class="glyphicon glyphicon-remove"></span></a>
+              <a class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true">Delete<span class="glyphicon glyphicon-remove"></span></a>    
+          {% endif %} 
+          <br/>         
+        {% endif %}
+      {% endif %}
+      <br/>
+  {% endfor %}
+
+{% endif %}
+
+<br/><br/>
+<!-- end Comments block -->
+
+<br/><br/><br/><br/>
+
+{% endblock %}
+
+

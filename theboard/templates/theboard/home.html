@@ -1,0 +1,56 @@
+{% extends 'theboard/main.html' %}
+
+{% block content%}
+
+
+<h1>Posts</h1>
+
+</br>
+
+{% for post in object_list %}
+    <div class="card w-75">
+        <div class="card-header">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group btn-group-sm" role="group" aria-label="First group">
+                    Posted by {{ post.author.username }} on {{ post.post_date }}                   
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end btn-group-sm">                
+                    <a class="btn btn-secondary btn-sm" href="{% url 'category' post.category|slugify %}" role="button">{{ post.category }}</a>
+                </div>
+            </div>        
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                <a href="{% url 'article-detail' post.pk %}" class="text-dark">{{ post.title }}</a>
+            </h5>
+            <p class="card-text">{{ post.body|safe|truncatechars:360 }}</p>        
+        </div>
+        <div class="card-footer">                  
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group btn-group-sm" role="group" aria-label="First group">
+                    <a class="btn btn-outline-secondary me-md-2 btn-sm" href="{% url 'article-detail' post.pk %}" role="button">
+                        Responses
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                            {{ post.comments.count }}
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </a>                            
+                </div>
+                {% if user.is_authenticated %}
+                    {% if user.id == post.author.id %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end btn-group-sm">                
+                            <a class="btn btn-outline-secondary me-md-2 btn-sm" href="{% url 'update_post' post.pk %}" role="button">Edit</a>
+                            <a class="btn btn-outline-danger btn-sm" href="{% url 'delete_post' post.pk %}" role="button">Delete</a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>   
+        </div>
+    </div>
+<br/><br/>
+{% endfor %}
+<br/><br/>
+<br/><br/>
+
+
+{% endblock %}

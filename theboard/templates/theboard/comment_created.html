@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <p>Привет, {{ comment.author }}! </p> -->
+    <p><h3>{{ body }}</h3></p>
+    <br/><br/>
+    <h4>Post title: <a href="{{ comment.get_absolute_url }}"> {{ comment.post.title }} </a></h4>
+    <p><strong>Response's Author:</strong> {{ comment.author }}</p>
+    <p><strong>Date:</strong> {{ comment.date_added|date:'d M Y H:i' }}</p>
+    <p><strong>Response:</strong> {{ comment.body|truncatechars:124 }}<a href="{{ comment.get_absolute_url }}"> >>> </a></p>
+</body>
+</html>

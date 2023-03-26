@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>{{ message.name }}, thanks for your message!</h2>
+    <br>
+    <p><strong>Subject: </strong>{{ message.subject }}</p>
+    <p><strong>Date: </strong>{{ message.date|date:'d-m-Y H:i:s'}}</p>
+    <p><strong>Message: </strong>{{ message.message }}</p>
+    <br/>
+    <p><strong>Email: </strong>{{ message.email }}</p>
+    <p><strong>Name: </strong>{{ message.name}}</p>    
+</body>
+    
+</html>
